@@ -14,17 +14,7 @@ import datetime
 import os
 ollamaclient = Client(host="http://192.168.2.127:11434")
 spinner = animation.Wait('spinner', text='penguin is working')
-def get_command_documentation(command: str) -> str:
-    """Get documentation for command using the linux man pages. Use it like the execute bash command tool. Do NOT execute the tool in the terminal using the execute_bash_command tool. Search for the command by passing it through the command argument.
-    Args:
-        command -> str
-    """
-    search_result = subprocess.run('man '+command, shell=True, capture_output=True, text=True)
-    spinner.stop()
-    print("Searching documentation for command:")
-    print_formatted_text(HTML(f'<violet>{str(command)}</violet>'))
-    spinner.start()
-    return search_result.stdout.strip()
+
 def execute_bash_command(command: str) -> str:
     """Execute bash commands in a linux shell environnemnt. Give command as full string.
     Args:
@@ -89,7 +79,7 @@ def bottom_toolbar():
     return HTML('This may not work... <b><style bg="ansired">DO IT YOURSELF</style></b>!')
 
 list_of_tools = ["execute_bash_command", "get_memory_entry", "enter_memory_entry"]
-tool_dict = {"execute_bash_command": execute_bash_command, "enter_memory_entry": enter_memory_entry, "get_memory_entry": get_memory_entry, "get_command_documentation": get_command_documentation}
+tool_dict = {"execute_bash_command": execute_bash_command, "enter_memory_entry": enter_memory_entry, "get_memory_entry": get_memory_entry}
 messages_memory = [{'role': 'system', 'content': "You are a linux ai-assistant called penguin. You can execute bash commands and use your memory to help the user completiting tasks. ALWAYS provide a final answer WITHOUT tool calls to inform he user baout your results."}]
 messages = []
 custom_style = Style.from_dict({
@@ -105,7 +95,7 @@ def run_agent(message, maximal_num_turns):
     messages = messages_memory
     spinner.start()
     for turn_number in range(maximal_num_turns):
-        response = ollamaclient.chat(model="qwen3.5:2b_context", messages=messages, tools=[execute_bash_command, get_memory_entry, enter_memory_entry, get_command_documentation])
+        response = ollamaclient.chat(model="qwen3.5:2b_context", messages=messages, tools=[execute_bash_command, get_memory_entry, enter_memory_entry])
 
         message_out = response["message"]
 

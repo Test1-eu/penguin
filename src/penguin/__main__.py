@@ -136,7 +136,7 @@ def main():
             print('Exiting penguin.')
             break
         else:
-            typewrite(run_agent(user_input, 10), speed=0.01)
+            typewrite(run_agent(user_input, 30), speed=0.01)
 
 if __name__ == "__main__":
     main()
